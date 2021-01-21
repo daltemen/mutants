@@ -1,6 +1,6 @@
-// Mutant is the main domain Entity
+//
+// This package has all the domain layer
 package mutants
-
 
 // Human Business Entity
 // Dna: Contains the dna represented as a matrix [nxn]
@@ -74,25 +74,34 @@ func (h *Human) checkIsMutant() bool {
 }
 
 func (h *Human) checkHorizontally(i int, j int) bool {
-	if h.Dna[i][j] == h.Dna[i][j+1] && h.Dna[i][j] == h.Dna[i][j+2] && h.Dna[i][j] == h.Dna[i][j+3] {
-		println("found horizontal ")
-		return true
-	}
-	return false
+	return h.Dna[i][j] == h.Dna[i][j+1] && h.Dna[i][j] == h.Dna[i][j+2] && h.Dna[i][j] == h.Dna[i][j+3]
 }
 
 func (h *Human) checkVertically(i int, j int) bool {
-	if h.Dna[i][j] == h.Dna[i+1][j] && h.Dna[i][j] == h.Dna[i+2][j] && h.Dna[i][j] == h.Dna[i+3][j] {
-		println("found vertical ")
-		return true
-	}
-	return false
+	return h.Dna[i][j] == h.Dna[i+1][j] && h.Dna[i][j] == h.Dna[i+2][j] && h.Dna[i][j] == h.Dna[i+3][j]
 }
 
 func (h *Human) checkDiagonal(i int) bool {
-	if h.Dna[i][i] == h.Dna[i+1][i+1] && h.Dna[i][i] == h.Dna[i+2][i+2] && h.Dna[i][i] == h.Dna[i+3][i+3] {
-		println("found diagonal ")
-		return true
+	return h.Dna[i][i] == h.Dna[i+1][i+1] && h.Dna[i][i] == h.Dna[i+2][i+2] && h.Dna[i][i] == h.Dna[i+3][i+3]
+}
+
+// HumanStats Has the statistics of all the humans processed
+// Mutants: Number of mutants
+// Humans: Number of humans
+type HumanStats struct {
+	Mutants int64
+	Humans  int64
+}
+
+// Build a new NewHumanStats
+func NewHumanStats(mutants int64, humans int64) HumanStats {
+	return HumanStats{
+		Mutants: mutants,
+		Humans:  humans,
 	}
-	return false
+}
+
+// Ration: Ratio of Mutants per number of Humans mutants/humans
+func (h *HumanStats) GetRatio() float32 {
+	return float32(h.Mutants) / float32(h.Humans)
 }
