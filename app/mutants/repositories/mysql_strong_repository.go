@@ -6,7 +6,6 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/satori/go.uuid"
 	"gorm.io/datatypes"
-	"log"
 	"mutants/app/mutants"
 	"strings"
 )
@@ -24,12 +23,7 @@ func (m *mySqlStrongWriteRepository) SaveDna(ctx context.Context, human mutants.
 	humanType := human.GetType().ToString()
 
 	segments := mapMatrixSegmentsToSlice(human.Dna)
-	segmentsBytes, err := json.Marshal(segments)
-	if err != nil {
-		log.Println(err)
-		return err // TODO: wrap error ?
-	}
-
+	segmentsBytes, _ := json.Marshal(segments)
 	return m.conn.Create(&DnaDB{ID: uid, HumanType: humanType, Segments: segmentsBytes}).Error // TODO: wrap error
 }
 

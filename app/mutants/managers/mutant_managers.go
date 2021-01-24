@@ -7,13 +7,13 @@ import (
 )
 
 type mutantManager struct {
-	readRepo        repositories.ReadRepository
-	strongWriteRepo repositories.StrongWriteRepository
-	eventualRepo    repositories.EventualWriteRepository
+	readRepo          repositories.ReadRepository
+	strongWriteRepo   repositories.StrongWriteRepository
+	eventualWriteRepo repositories.EventualWriteRepository
 }
 
 func NewMutantManager(readRepo repositories.ReadRepository, strongRepo repositories.StrongWriteRepository, eventualRepo repositories.EventualWriteRepository) MutantManager {
-	return &mutantManager{readRepo: readRepo, strongWriteRepo: strongRepo, eventualRepo: eventualRepo}
+	return &mutantManager{readRepo: readRepo, strongWriteRepo: strongRepo, eventualWriteRepo: eventualRepo}
 }
 
 func (m *mutantManager) IsMutant(ctx context.Context, dna [][]string) (bool, error) {
@@ -25,7 +25,7 @@ func (m *mutantManager) IsMutant(ctx context.Context, dna [][]string) (bool, err
 	}
 	humanType := human.GetType()
 
-	countsErr := m.eventualRepo.IncrementCount(ctx, humanType)
+	countsErr := m.eventualWriteRepo.IncrementCount(ctx, humanType)
 	if countsErr != nil {
 		return false, countsErr // TODO: handle error
 	}
@@ -42,6 +42,6 @@ func (m *mutantManager) RetrieveStats(ctx context.Context) (StatsSummary, error)
 	return StatsSummary{
 		Mutants: stats.Mutants,
 		Humans:  stats.Humans,
-		Ratio:   float32(float64(stats.Humans)/float64(stats.Mutants)),
+		Ratio:   float32(float64(stats.Mutants) / float64(stats.Humans)),
 	}, nil
 }
