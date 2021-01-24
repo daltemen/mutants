@@ -2,6 +2,7 @@ package rest
 
 import (
 	"github.com/labstack/echo/v4"
+	"log"
 	"mutants/app/mutants/managers"
 	"net/http"
 	"strings"
@@ -18,7 +19,8 @@ func NewRest(mutantManager managers.MutantManager) *Rest {
 func (r *Rest) GetStats(c echo.Context) error {
 	stats, err := r.mutantManager.RetrieveStats(c.Request().Context())
 	if err != nil {
-		return err // TODO: handle err
+		log.Println(err)
+		return c.JSON(http.StatusInternalServerError, map[string]string{})
 	}
 
 	return c.JSON(http.StatusOK, &StatsResponse{
@@ -36,9 +38,9 @@ func (r *Rest) PostMutant(c echo.Context) error {
 	dna := mapSegmentToMatrix(dnaRequest.Dna)
 
 	isMutant, err := r.mutantManager.IsMutant(c.Request().Context(), dna)
-	// TODO: handle err
 	if err != nil {
-		return err
+		log.Println(err)
+		return c.JSON(http.StatusInternalServerError, map[string]string{})
 	}
 	if isMutant {
 		return c.JSON(http.StatusOK, map[string]string{})
