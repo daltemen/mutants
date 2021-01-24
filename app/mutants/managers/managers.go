@@ -21,6 +21,7 @@ type MutantManager interface {
 	RetrieveStats(ctx context.Context) (StatsSummary, error)
 }
 
+// StatsSummary holds all the important stats
 type StatsSummary struct {
 	Mutants int64
 	Humans  int64
