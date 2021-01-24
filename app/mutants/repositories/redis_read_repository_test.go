@@ -48,11 +48,3 @@ func (suite *redisReadRepoSuite) Test_redisReadRepository_GetStats_Success() {
 	suite.Equal(int64(2), h.Humans)
 	suite.Equal(int64(2), h.Mutants)
 }
-
-func (suite *redisReadRepoSuite) Test_redisReadRepository_GetStats_Failed() {
-	h, err := suite.repository.GetStats(suite.ctx)
-
-	suite.NoError(err)
-	suite.Equal(int64(2), h.Humans)
-	suite.Equal(int64(2), h.Mutants)
-}

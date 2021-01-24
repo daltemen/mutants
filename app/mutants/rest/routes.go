@@ -5,8 +5,6 @@ import (
 	"net/http"
 )
 
-type EchoRestType func(c echo.Context) error
-
 func RegisterRoutes(e *echo.Echo, rest *Rest) {
 	e.GET("/health", Health)
 	e.GET("/api/v1/stats", rest.GetStats)
