@@ -15,7 +15,8 @@ package mutants
 // {CCCCTA}
 // {TCACTG}
 type Human struct {
-	Dna [][]string
+	Dna   [][]string
+	_type *HumanTypes
 }
 
 // Build a new Human
@@ -24,6 +25,30 @@ func NewHuman(dna [][]string) Human {
 		Dna: dna,
 	}
 	return human
+}
+
+type HumanTypes string
+
+const (
+	HumanType  HumanTypes = "HUMAN"
+	MutantType HumanTypes = "MUTANT"
+)
+
+func (h HumanTypes) ToString() string {
+	return string(h)
+}
+
+// Get type of a Human
+func (h *Human) GetType() HumanTypes {
+	if h._type != nil {
+		return *h._type
+	}
+	_type := HumanType
+	if h.IsMutant() {
+		_type = MutantType
+	}
+	h._type = &_type
+	return *h._type
 }
 
 // It checks if the human is a mutant

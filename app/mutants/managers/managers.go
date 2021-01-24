@@ -21,9 +21,8 @@ type MutantManager interface {
 	RetrieveStats(ctx context.Context) (StatsSummary, error)
 }
 
-// {“count_mutant_dna”:40, “count_human_dna”:100: “ratio”:0.4}
 type StatsSummary struct {
-	Mutants int
-	Humans  int
+	Mutants int64
+	Humans  int64
 	Ratio   float32
 }
