@@ -24,7 +24,7 @@ func (m *mySqlStrongWriteRepository) SaveDna(ctx context.Context, human mutants.
 
 	segments := mapMatrixSegmentsToSlice(human.Dna)
 	segmentsBytes, _ := json.Marshal(segments)
-	return m.conn.Create(&DnaDB{ID: uid, HumanType: humanType, Segments: segmentsBytes}).Error // TODO: wrap error
+	return m.conn.Create(&DnaDB{ID: uid, HumanType: humanType, Segments: segmentsBytes}).Error
 }
 
 type DnaDB struct {

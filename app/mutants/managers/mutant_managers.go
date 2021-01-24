@@ -2,6 +2,7 @@ package managers
 
 import (
 	"context"
+	"log"
 	"mutants/app/mutants"
 	"mutants/app/mutants/repositories"
 )
@@ -21,13 +22,15 @@ func (m *mutantManager) IsMutant(ctx context.Context, dna [][]string) (bool, err
 
 	savedErr := m.strongWriteRepo.SaveDna(ctx, human)
 	if savedErr != nil {
-		return false, savedErr // TODO: handle error
+		log.Println(savedErr)
+		return false, &ManagerErrors{Description: "SaveDna Error on the Strong Write Repo failed", Err: SaveRowError}
 	}
 	humanType := human.GetType()
 
 	countsErr := m.eventualWriteRepo.IncrementCount(ctx, humanType)
 	if countsErr != nil {
-		return false, countsErr // TODO: handle error
+		log.Println(countsErr)
+		return false, &ManagerErrors{Description: "IncrementCount on Eventual Write Repo failed", Err: CountsError}
 	}
 
 	return humanType == mutants.MutantType, nil
@@ -36,7 +39,8 @@ func (m *mutantManager) IsMutant(ctx context.Context, dna [][]string) (bool, err
 func (m *mutantManager) RetrieveStats(ctx context.Context) (StatsSummary, error) {
 	stats, err := m.readRepo.GetStats(ctx)
 	if err != nil {
-		return StatsSummary{}, err // TODO: handle error
+		log.Println(err)
+		return StatsSummary{}, &ManagerErrors{Description: "GetStats on the Read Repo failed", Err: StatsError}
 	}
 
 	return StatsSummary{

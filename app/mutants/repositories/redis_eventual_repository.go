@@ -23,5 +23,5 @@ func (r *redisEventualWriteRepository) IncrementCount(ctx context.Context, human
 		counterKey = "humans"
 	}
 	_, err := redis.Int(conn.Do("INCR", counterKey))
-	return err // TODO: handle err
+	return err
 }

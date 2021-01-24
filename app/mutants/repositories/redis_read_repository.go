@@ -22,13 +22,13 @@ func (r *redisReadRepository) GetStats(ctx context.Context) (mutants.HumanStats,
 	mCount, err := redis.Bytes(conn.Do("GET", "mutants"))
 	mutantsCount, _ := strconv.ParseInt(string(mCount), 10, 64)
 	if err != nil {
-		return mutants.HumanStats{}, err // TODO: handle err
+		return mutants.HumanStats{}, err
 	}
 
 	hCount, err := redis.Bytes(conn.Do("GET", "humans"))
 	humansCount, _ := strconv.ParseInt(string(hCount), 10, 64)
 	if err != nil {
-		return mutants.HumanStats{}, err // TODO: handle err
+		return mutants.HumanStats{}, err
 	}
 
 	return mutants.HumanStats{Mutants: mutantsCount, Humans: humansCount}, nil
