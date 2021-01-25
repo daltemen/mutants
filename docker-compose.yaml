@@ -1,0 +1,47 @@
+version: '3.7'
+
+services:
+  mutants-db:
+    image: mysql:5.7
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: $DB_PASSWORD
+      MYSQL_DATABASE: $DB_NAME
+    networks:
+      - mutants_net
+    ports:
+      - 4612:3306
+  mutants-api:
+    build: .
+    ports:
+      - 5007:$PORT
+    networks:
+      - mutants_net
+    volumes:
+      - .:/mutants
+    env_file:
+      - .env
+    depends_on:
+      - mutants-db
+    entrypoint: CompileDaemon -log-prefix=false -build="go build -o rest_server -v main.go" -command="./rest_server"
+  mutants-redis:
+    image: "redis"
+    ports:
+      - 6377:$REDISPORT
+    volumes:
+      - $PWD/redis-data:/var/lib/redis
+      - $PWD/redis.conf:/usr/local/etc/redis/redis.conf
+    env_file:
+      - .env
+    networks:
+      - mutants_net
+
+networks:
+  mutants_net:
+    name: mutants_net
+    driver: bridge
+volumes:
+  db_data:
