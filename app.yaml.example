@@ -1,0 +1,18 @@
+runtime: go115
+
+instance_class: B1
+manual_scaling:
+  instances: 1
+
+env_variables:
+  PORT: 8080
+  INSTANCE_CONNECTION_NAME: mutants:us-central1:mutants-db
+  DB_USERNAME: user
+  DB_PASSWORD: pass
+  DB_NAME: dbname
+
+  REDISHOST: 'ip'
+  REDISPORT: 'port'
+
+vpc_access_connector:
+  name: 'projects/mutants/locations/us-central1/connectors/connectorname'

@@ -26,7 +26,7 @@ services:
       - .env
     depends_on:
       - mutants-db
-    entrypoint: CompileDaemon -log-prefix=false -build="go build -o rest_server -v app/cmd/main.go" -command="./rest_server"
+    entrypoint: CompileDaemon -log-prefix=false -build="go build -o rest_server -v main.go" -command="./rest_server"
   mutants-redis:
     image: "redis"
     ports:

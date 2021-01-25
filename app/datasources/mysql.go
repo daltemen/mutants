@@ -27,12 +27,24 @@ func ConnectDb() *gorm.DB {
 	dbHost := os.Getenv("DB_HOST")
 	dbPort := os.Getenv("DB_PORT")
 	dbName := os.Getenv("DB_NAME")
+	instanceConnectionName := os.Getenv("INSTANCE_CONNECTION_NAME")
 
-	db, err := gorm.Open("mysql", dbParams(dbUsername,
-		dbPassword,
-		dbHost,
-		dbPort,
-		dbName))
+	connString := ""
+	if os.Getenv("INSTANCE_CONNECTION_NAME") != "" {
+		socketDir, isSet := os.LookupEnv("DB_SOCKET_DIR")
+		if !isSet {
+			socketDir = "/cloudsql"
+		}
+		connString = fmt.Sprintf("%s:%s@unix(/%s/%s)/%s?parseTime=true", dbUsername, dbPassword, socketDir, instanceConnectionName, dbName)
+	} else {
+		connString = dbParams(dbUsername,
+			dbPassword,
+			dbHost,
+			dbPort,
+			dbName)
+	}
+
+	db, err := gorm.Open("mysql", connString)
 
 	if err != nil {
 		fmt.Println(err)
