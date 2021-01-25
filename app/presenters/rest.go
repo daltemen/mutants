@@ -6,11 +6,10 @@ import (
 	_managers "mutants/app/mutants/managers"
 	"mutants/app/mutants/repositories"
 	"mutants/app/mutants/rest"
-	"os"
 )
 
 // TODO: use a library to handle dependency injection
-func RunRestServer() {
+func RunRestServer() *echo.Echo {
 	// -- init db and data-sources
 	db := datasources.ConnectDb()
 	datasources.Migrate(db)
@@ -27,5 +26,5 @@ func RunRestServer() {
 	// -- init rest server
 	e := echo.New()
 	rest.RegisterRoutes(e, restMethods)
-	e.Logger.Fatal(e.Start(":" + os.Getenv("PORT")))
+	return e
 }
