@@ -48,6 +48,7 @@ Mutants is a service for looking for if a human either is a mutant or not. This 
 You could test either in local or directly in production.
 
 `Api Production URL: https://mutants-fer.uc.r.appspot.com/`
+*Service Off*
 
 Just use the Api URL instead of localhost in the below examples.
 
